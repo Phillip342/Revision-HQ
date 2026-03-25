@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Revision HQ — Llangatwg Community School</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest:#1a4a2e; --forest-mid:#2d6e47; --forest-light:#4a9e6b;
+    --forest-pale:#e8f4ec; --white:#fff; --off:#f7f9f7;
+    --text:#1a2e22; --muted:#5a7a64; --border:#d4e6da;
+    --amber-light:#fdf3dc; --red-light:#fdf0ee; --green-light:#e8f8ee;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Sans',sans-serif;background:var(--off);color:var(--text);min-height:100vh}
+
+  /* HEADER */
+  .hdr{background:var(--forest);color:#fff;padding:0 24px;height:60px;display:flex;align-items:center;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.2)}
+  .hdr-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.15rem;letter-spacing:-.5px}
+  .hdr-logo span{color:#7dd4a0}
+  .hdr-school{font-size:.72rem;color:rgba(255,255,255,.6);margin-top:1px}
+
+  /* TABS */
+  .tabs{display:flex;background:#fff;border-bottom:2px solid var(--border);padding:0 24px;overflow-x:auto;position:sticky;top:60px;z-index:90;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{padding:13px 16px;font-family:'Syne',sans-serif;font-weight:700;font-size:.82rem;color:var(--muted);cursor:pointer;border:none;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;background:none;display:flex;align-items:center;gap:6px;transition:color .2s}
+  .tab.active{color:var(--forest);border-bottom-color:var(--forest)}
+  .tab:hover{color:var(--forest)}
+
+  /* SECTIONS */
+  .section{display:none;padding:28px;max-width:1060px;margin:0 auto}
+  .section.active{display:block}
+
+  /* HERO */
+  .hero{background:linear-gradient(135deg,var(--forest),var(--forest-mid));border-radius:16px;padding:36px 44px;color:#fff;margin-bottom:28px;position:relative;overflow:hidden}
+  .hero h1{font-family:'Syne',sans-serif;font-weight:800;font-size:1.9rem;margin-bottom:8px;letter-spacing:-.5px}
+  .hero p{color:rgba(255,255,255,.75);font-size:.95rem;max-width:500px;line-height:1.6}
+  .hero-badge{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:3px 12px;font-size:.72rem;font-weight:700;display:inline-block;margin-bottom:14px;letter-spacing:.5px}
+
+  /* TYPOGRAPHY */
+  .sec-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;color:var(--forest);margin-bottom:6px}
+  .sec-sub{font-size:.88rem;color:var(--muted);margin-bottom:20px;line-height:1.5}
+  .divider{height:1px;background:var(--border);margin:22px 0}
+
+  /* SESSION CARDS */
+  .sess-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+  .sess-card{background:#fff;border:2px solid var(--border);border-radius:14px;padding:18px 14px;text-align:center;border-top:4px solid var(--forest)}
+  .sess-card .mins{font-family:'Syne',sans-serif;font-weight:800;font-size:2rem;color:var(--forest);line-height:1}
+  .sess-card .unit{font-size:.72rem;color:var(--muted);font-weight:600;margin-bottom:6px}
+  .sess-card .name{font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;margin-bottom:5px}
+  .sess-card .desc{font-size:.78rem;color:var(--muted);line-height:1.4}
+
+  /* WELLBEING */
+  .wb-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+  .wb-card{background:#fff;border:2px solid var(--border);border-radius:14px;padding:22px 18px}
+  .wb-card .wb-icon{font-size:1.8rem;margin-bottom:8px}
+  .wb-card h3{font-family:'Syne',sans-serif;font-weight:800;font-size:.92rem;color:var(--forest);margin-bottom:6px}
+  .wb-card p{font-size:.82rem;color:var(--muted);line-height:1.5}
+
+  /* STRATEGY GRID */
+  .strategy-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-bottom:20px}
+  .strat-btn{background:#fff;border:2px solid var(--border);border-radius:14px;padding:20px 18px;cursor:pointer;text-align:left;transition:all .18s;display:flex;flex-direction:column;gap:8px}
+  .strat-btn:hover{border-color:var(--forest-light);transform:translateY(-2px);box-shadow:0 4px 20px rgba(26,74,46,.1)}
+  .strat-btn.active{border-color:var(--forest);background:var(--forest-pale)}
+  .tier-badge{font-size:.68rem;font-weight:700;font-family:'Syne',sans-serif;padding:3px 10px;border-radius:20px;display:inline-block;letter-spacing:.5px}
+  .tier-1{background:var(--green-light);color:#27ae60}
+  .tier-2{background:var(--amber-light);color:#b07a10}
+  .tier-3{background:var(--red-light);color:#c0392b}
+  .strat-icon{font-size:1.6rem}
+  .strat-btn h3{font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;color:var(--forest)}
+  .strat-btn p{font-size:.81rem;color:var(--muted);line-height:1.5}
+
+  /* DETAIL PANEL */
+  .detail-panel{background:#fff;border:2px solid var(--forest);border-radius:16px;padding:28px;margin-bottom:20px;display:none}
+  .detail-panel.open{display:block;animation:fadeIn .25s ease}
+  .detail-panel h2{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:800;color:var(--forest);margin-bottom:10px}
+  .detail-panel .body-text{font-size:.88rem;line-height:1.7;margin-bottom:4px}
+  .practice-box{background:var(--forest-pale);border-left:4px solid var(--forest);border-radius:0 10px 10px 0;padding:14px 18px;margin:14px 0;font-size:.86rem}
+  .practice-box strong{display:block;margin-bottom:6px;color:var(--forest);font-family:'Syne',sans-serif;font-weight:700}
+  .detail-panel ul{padding-left:20px;margin-top:8px}
+  .detail-panel li{font-size:.86rem;margin-bottom:5px}
+
+  /* BUTTONS */
+  .btn{background:var(--forest);color:#fff;border:none;border-radius:10px;padding:9px 18px;font-family:'Syne',sans-serif;font-weight:700;font-size:.83rem;cursor:pointer;transition:background .2s;white-space:nowrap}
+  .btn:hover{background:var(--forest-mid)}
+  .btn:disabled{background:#aaa;cursor:not-allowed}
+
+  /* POMODORO */
+  .pom-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  .pom-box{background:var(--forest);border-radius:20px;padding:36px 28px;text-align:center;color:#fff}
+  .pom-label{font-size:.75rem;letter-spacing:2px;color:rgba(255,255,255,.6);margin-bottom:10px;text-transform:uppercase}
+  .pom-display{font-family:'Syne',sans-serif;font-weight:800;font-size:4.5rem;letter-spacing:-2px;line-height:1;margin-bottom:6px}
+  .pom-sub{font-size:.82rem;color:rgba(255,255,255,.6);margin-bottom:16px}
+  .pom-bar{height:4px;background:rgba(255,255,255,.2);border-radius:2px;margin-bottom:20px;overflow:hidden}
+  .pom-fill{height:100%;background:#7dd4a0;border-radius:2px;transition:width 1s linear}
+  .pom-modes{display:flex;gap:8px;justify-content:center;margin-bottom:18px}
+  .pom-mode{background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);border-radius:8px;padding:5px 12px;font-family:'Syne',sans-serif;font-weight:700;font-size:.75rem;cursor:pointer;transition:all .2s}
+  .pom-mode.active{background:var(--forest-pale);border-color:var(--forest-light);color:var(--forest)}
+  .pom-btns{display:flex;gap:10px;justify-content:center;margin-bottom:20px}
+  .pom-btn{border-radius:10px;padding:9px 20px;font-family:'Syne',sans-serif;font-weight:700;font-size:.83rem;cursor:pointer;transition:all .2s}
+  .pom-btn.go{background:#7dd4a0;border:none;color:var(--forest)}
+  .pom-btn.rst{background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.3);color:#fff}
+  .pom-dots{display:flex;gap:8px;justify-content:center}
+  .pom-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.25);transition:background .3s}
+  .pom-dot.done{background:#7dd4a0}
+  .pom-dot.cur{background:#fff}
+  .pom-info{background:#fff;border:2px solid var(--border);border-radius:16px;padding:26px;display:flex;flex-direction:column;gap:16px}
+  .pom-info h3{font-family:'Syne',sans-serif;font-weight:800;font-size:1.05rem;color:var(--forest)}
+  .pom-step{display:flex;gap:13px;align-items:flex-start}
+  .step-num{background:var(--forest);color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:.78rem;flex-shrink:0;margin-top:2px}
+  .step-txt{font-size:.86rem;line-height:1.5}
+  .step-txt strong{display:block;color:var(--forest);margin-bottom:2px}
+  .pom-tip{background:var(--forest-pale);border-radius:10px;padding:13px 15px;font-size:.82rem;color:var(--muted);line-height:1.5}
+
+  /* SUBJECT TIPS */
+  .subj-panel{background:#fff;border:2px solid var(--border);border-radius:16px;overflow:hidden;display:none}
+  .subj-panel.open{display:block;animation:fadeIn .25s ease}
+  .subj-hdr{background:var(--forest);color:#fff;padding:16px 22px;display:flex;align-items:center;gap:14px}
+  .subj-hdr .s-icon{font-size:1.7rem}
+  .subj-hdr h2{font-family:'Syne',sans-serif;font-weight:800;font-size:1.05rem}
+  .subj-hdr p{font-size:.8rem;color:rgba(255,255,255,.7);margin-top:2px}
+  .tips-body{padding:22px}
+  .tips-list{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:18px}
+  .tips-list li{display:flex;gap:12px;align-items:flex-start;padding:11px 15px;background:var(--off);border-radius:10px;border-left:4px solid var(--forest-light);font-size:.86rem;line-height:1.5}
+  .tip-icon{font-size:1rem;flex-shrink:0;margin-top:1px}
+  .ko-box{background:var(--forest-pale);border:2px solid var(--forest);border-radius:12px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+  .ko-text strong{display:block;color:var(--forest);font-family:'Syne',sans-serif;font-weight:700;margin-bottom:4px;font-size:.9rem}
+  .ko-text span{font-size:.83rem;color:var(--muted)}
+  .ko-link{background:var(--forest);color:#fff;border-radius:10px;padding:10px 20px;font-family:'Syne',sans-serif;font-weight:700;font-size:.83rem;text-decoration:none;white-space:nowrap;transition:background .2s}
+  .ko-link:hover{background:var(--forest-mid)}
+
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+  /* RAG TRACKER */
+  .rag-intro{background:#fff;border:2px solid var(--border);border-radius:16px;padding:22px 26px;margin-bottom:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .rag-legend{display:flex;gap:10px;flex-wrap:wrap}
+  .rag-key{display:flex;align-items:center;gap:6px;font-size:.82rem;font-weight:600;font-family:'Syne',sans-serif}
+  .rag-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0}
+  .rag-subject-block{background:#fff;border:2px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:14px}
+  .rag-subject-hdr{background:var(--forest);color:#fff;padding:12px 20px;font-family:'Syne',sans-serif;font-weight:700;font-size:.92rem;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
+  .rag-subject-hdr .hdr-icon{font-size:1.1rem}
+  .rag-subject-hdr .hdr-chevron{margin-left:auto;transition:transform .2s;font-size:.8rem}
+  .rag-subject-hdr.open .hdr-chevron{transform:rotate(180deg)}
+  .rag-topics{padding:14px 18px;display:none;flex-direction:column;gap:8px}
+  .rag-topics.open{display:flex}
+  .rag-topic-row{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--off);border-radius:10px;gap:12px}
+  .rag-topic-name{font-size:.86rem;flex:1}
+  .rag-btns{display:flex;gap:6px;flex-shrink:0}
+  .rag-btn{width:32px;height:32px;border-radius:50%;border:2px solid transparent;cursor:pointer;font-size:.75rem;font-weight:700;transition:all .15s;opacity:.35}
+  .rag-btn.selected{opacity:1;transform:scale(1.15)}
+  .rag-btn.r{background:#e74c3c;border-color:#c0392b;color:#fff}
+  .rag-btn.a{background:#e8a020;border-color:#b07a10;color:#fff}
+  .rag-btn.g{background:#27ae60;border-color:#1e8449;color:#fff}
+  .rag-progress{height:6px;background:var(--border);border-radius:3px;margin:0 18px 14px;overflow:hidden}
+  .rag-progress-fill{height:100%;background:var(--forest-light);border-radius:3px;transition:width .4s ease}
+  .rag-stats{display:flex;gap:6px;padding:0 18px 14px;font-size:.75rem;font-weight:700;font-family:'Syne',sans-serif}
+  .rag-stat{padding:3px 10px;border-radius:20px}
+  .rag-stat.r{background:#fdf0ee;color:#c0392b}
+  .rag-stat.a{background:var(--amber-light);color:#b07a10}
+  .rag-stat.g{background:var(--green-light);color:#1e8449}
+  .rag-save-note{font-size:.78rem;color:var(--muted);text-align:center;padding:8px;margin-top:4px}
+
+  /* EXAM TECHNIQUE */
+  .technique-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+  .tech-tab{background:#fff;border:2px solid var(--border);border-radius:10px;padding:8px 16px;font-family:'Syne',sans-serif;font-weight:700;font-size:.8rem;cursor:pointer;color:var(--muted);transition:all .18s}
+  .tech-tab.active{background:var(--forest);border-color:var(--forest);color:#fff}
+  .tech-panel{display:none}
+  .tech-panel.active{display:block;animation:fadeIn .25s ease}
+  .tech-card{background:#fff;border:2px solid var(--border);border-radius:14px;padding:22px;margin-bottom:14px}
+  .tech-card h3{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:var(--forest);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+  .tech-card p{font-size:.88rem;line-height:1.7;color:var(--text);margin-bottom:10px}
+  .tech-card ul{padding-left:20px}
+  .tech-card li{font-size:.86rem;line-height:1.6;margin-bottom:6px}
+  .tech-card .example-box{background:var(--forest-pale);border-left:4px solid var(--forest);border-radius:0 10px 10px 0;padding:13px 16px;margin-top:12px;font-size:.85rem;line-height:1.6}
+  .tech-card .example-box strong{display:block;color:var(--forest);font-family:'Syne',sans-serif;font-weight:700;margin-bottom:5px}
+  .marks-badge{background:var(--forest);color:#fff;border-radius:20px;padding:2px 10px;font-size:.72rem;font-weight:700;font-family:'Syne',sans-serif;margin-left:8px}
+
+  /* EXAM DAY */
+  .examday-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px}
+  .examday-card{background:#fff;border:2px solid var(--border);border-radius:16px;overflow:hidden}
+  .examday-card-hdr{padding:16px 20px;font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;display:flex;align-items:center;gap:10px}
+  .examday-card-hdr.night{background:#1a2e4a;color:#fff}
+  .examday-card-hdr.morning{background:#e8a020;color:#fff}
+  .examday-card-hdr.during{background:var(--forest);color:#fff}
+  .examday-card-hdr.after{background:#27ae60;color:#fff}
+  .examday-list{list-style:none;padding:16px 20px;display:flex;flex-direction:column;gap:8px}
+  .examday-list li{display:flex;gap:10px;align-items:flex-start;font-size:.86rem;line-height:1.5}
+  .examday-list li .ei{flex-shrink:0;font-size:1rem;margin-top:1px}
+  .panic-box{background:#fdf0ee;border:2px solid #e74c3c;border-radius:14px;padding:22px;margin-bottom:20px}
+  .panic-box h3{font-family:'Syne',sans-serif;font-weight:800;color:#c0392b;margin-bottom:14px;font-size:1rem}
+  .panic-steps{display:flex;flex-direction:column;gap:10px}
+  .panic-step{display:flex;gap:12px;align-items:flex-start;background:#fff;border-radius:10px;padding:12px 14px}
+  .panic-num{background:#e74c3c;color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:.78rem;flex-shrink:0;margin-top:1px}
+  .panic-text{font-size:.86rem;line-height:1.5}
+  .checklist-box{background:#fff;border:2px solid var(--border);border-radius:14px;padding:20px;margin-bottom:20px}
+  .checklist-box h3{font-family:'Syne',sans-serif;font-weight:800;color:var(--forest);margin-bottom:14px;font-size:.95rem}
+  .checklist-item{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--border);font-size:.86rem}
+  .checklist-item:last-child{border-bottom:none}
+  .checklist-item input[type=checkbox]{width:18px;height:18px;accent-color:var(--forest);cursor:pointer;flex-shrink:0}
+
+  @media(max-width:700px){
+    .sess-grid,.wb-grid,.strategy-grid,.pom-grid{grid-template-columns:1fr 1fr}
+  }
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div>
+    <div class="hdr-logo">Revision <span>HQ</span></div>
+    <div class="hdr-school">Llangatwg Community School · Year 10 &amp; 11</div>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('home')">🏠 Home</button>
+  <button class="tab" onclick="showTab('strategies')">🧠 Revision Strategies</button>
+  <button class="tab" onclick="showTab('pomodoro')">⏱️ Pomodoro Timer</button>
+  <button class="tab" onclick="showTab('subjects')">📚 Subject Tips</button>
+  <button class="tab" onclick="showTab('rag')">🔴 RAG Tracker</button>
+  <button class="tab" onclick="showTab('technique')">✍️ Exam Technique</button>
+  <button class="tab" onclick="showTab('examday')">📋 Exam Day</button>
+</div>
+
+<!-- ══════════════════ HOME ══════════════════ -->
+<div class="section active" id="home">
+  <div class="hero">
+    <div class="hero-badge">Llangatwg Community School · 2025–2026</div>
+    <h1>Your Revision Hub 🎯</h1>
+    <p>Evidence-based revision strategies, a Pomodoro timer and subject-specific tips with WJEC Knowledge Organiser links — everything you need to revise smarter for your GCSEs.</p>
+  </div>
+  <div class="sec-title">The Perfect 45-Minute Session</div>
+  <div class="sess-grid">
+    <div class="sess-card"><div class="mins">5</div><div class="unit">MINS</div><div class="name">Brain Dump</div><div class="desc">Write everything you remember — no notes.</div></div>
+    <div class="sess-card"><div class="mins">25</div><div class="unit">MINS</div><div class="name">Active Study</div><div class="desc">Past paper questions, flashcard testing, practice problems.</div></div>
+    <div class="sess-card"><div class="mins">10</div><div class="unit">MINS</div><div class="name">Check &amp; Correct</div><div class="desc">Identify gaps. What you got wrong is what to revise next.</div></div>
+    <div class="sess-card"><div class="mins">5</div><div class="unit">MINS</div><div class="name">Plan Next</div><div class="desc">Update your timetable. Decide your next topic.</div></div>
+  </div>
+  <div class="sec-title">Wellbeing — The Non-Negotiables</div>
+  <div class="wb-grid">
+    <div class="wb-card"><div class="wb-icon">😴</div><h3>Sleep</h3><p>Memory consolidates during sleep. Aim for 8–9 hours. Late-night cramming undermines everything revised that day.</p></div>
+    <div class="wb-card"><div class="wb-icon">☕</div><h3>Breaks</h3><p>Short, regular breaks prevent cognitive fatigue. Step away from screens. A short walk beats scrolling every time.</p></div>
+    <div class="wb-card"><div class="wb-icon">🏃</div><h3>Exercise</h3><p>Even 20–30 minutes of physical activity improves focus, mood and memory retention. It is not time wasted.</p></div>
+    <div class="wb-card"><div class="wb-icon">📵</div><h3>Environment</h3><p>Phone in another room. Notifications are the enemy of deep focus. Background music without lyrics is fine for some learners.</p></div>
+  </div>
+</div>
+
+<!-- ══════════════════ STRATEGIES ══════════════════ -->
+<div class="section" id="strategies">
+  <div class="sec-title">Revision Strategies</div>
+  <div class="sec-sub">Not all revision is equal. Click any strategy below to learn more about it and how to use it effectively.</div>
+  <div class="strategy-grid" id="strat-grid"></div>
+  <div class="detail-panel" id="detail-panel">
+    <h2 id="detail-title"></h2>
+    <div class="body-text" id="detail-body"></div>
+    <div class="practice-box"><strong id="detail-practice-label">What it looks like in practice</strong><span id="detail-practice"></span></div>
+    <ul id="detail-bullets"></ul>
+  </div>
+</div>
+
+<!-- ══════════════════ POMODORO ══════════════════ -->
+<div class="section" id="pomodoro">
+  <div class="sec-title">Pomodoro Timer</div>
+  <div class="sec-sub">25 minutes of deep work, then a 5-minute break — backed by the same cognitive science as spaced practice.</div>
+  <div class="pom-grid">
+    <div class="pom-box">
+      <div class="pom-label" id="pom-label">FOCUS SESSION</div>
+      <div class="pom-display" id="pom-time">25:00</div>
+      <div class="pom-sub" id="pom-sub">Session 1 of 4</div>
+      <div class="pom-bar"><div class="pom-fill" id="pom-fill" style="width:100%"></div></div>
+      <div class="pom-modes">
+        <button class="pom-mode active" id="m-focus" onclick="setMode('focus')">Focus 25m</button>
+        <button class="pom-mode" id="m-short" onclick="setMode('short')">Break 5m</button>
+        <button class="pom-mode" id="m-long" onclick="setMode('long')">Long 30m</button>
+      </div>
+      <div class="pom-btns">
+        <button class="pom-btn go" id="pom-start" onclick="toggleTimer()">▶ Start</button>
+        <button class="pom-btn rst" onclick="resetTimer()">↺ Reset</button>
+      </div>
+      <div class="pom-dots" id="pom-dots">
+        <div class="pom-dot cur"></div><div class="pom-dot"></div><div class="pom-dot"></div><div class="pom-dot"></div>
+      </div>
+    </div>
+    <div class="pom-info">
+      <h3>How to use the Pomodoro Technique</h3>
+      <div class="pom-step"><div class="step-num">1</div><div class="step-txt"><strong>Choose your task</strong>Pick one topic or subject before you start. Have your notes, Knowledge Organiser or past paper ready.</div></div>
+      <div class="pom-step"><div class="step-num">2</div><div class="step-txt"><strong>Focus for 25 minutes</strong>Work on nothing else. Phone away. Notifications off. If a thought pops up, write it down and return to it later.</div></div>
+      <div class="pom-step"><div class="step-num">3</div><div class="step-txt"><strong>Take a 5-minute break</strong>Step away from your desk. Stretch, have a drink, look out the window. Do NOT scroll social media.</div></div>
+      <div class="pom-step"><div class="step-num">4</div><div class="step-txt"><strong>After 4 cycles — long break</strong>Take 20–30 minutes away. You've earned it. This is when memory consolidation begins.</div></div>
+      <div class="pom-tip">💡 <strong style="color:var(--forest)">Tip:</strong> Use the first 5 minutes of each Pomodoro as a brain dump — write everything you can remember about the topic before opening your notes.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ SUBJECTS ══════════════════ -->
+<div class="section" id="subjects">
+  <div class="sec-title">Subject-Specific Revision Tips</div>
+  <div class="sec-sub">Select your subject for targeted revision advice and a direct link to WJEC Knowledge Organisers.</div>
+  <div class="form-field" style="margin-bottom:22px;max-width:360px">
+    <label>Choose a Subject</label>
+    <select id="subj-select" onchange="showSubject()">
+      <option value="">— Select a subject —</option>
+      <option value="maths">Mathematics (WJEC)</option>
+      <option value="english_lang">English Language (WJEC)</option>
+      <option value="english_lit">English Literature (WJEC)</option>
+      <option value="biology">Biology (WJEC)</option>
+      <option value="chemistry">Chemistry (WJEC)</option>
+      <option value="physics">Physics (WJEC)</option>
+      <option value="history">History (WJEC)</option>
+      <option value="geography">Geography (WJEC)</option>
+      <option value="welsh">Welsh (WJEC)</option>
+      <option value="french">French (WJEC)</option>
+      <option value="religious_studies">Religious Studies (WJEC)</option>
+      <option value="business">Business Studies (WJEC)</option>
+      <option value="computer_science">Computer Science (WJEC)</option>
+    </select>
+  </div>
+  <div class="subj-panel" id="subj-panel">
+    <div class="subj-hdr">
+      <span class="s-icon" id="s-icon">📚</span>
+      <div><h2 id="s-title"></h2><p id="s-sub"></p></div>
+    </div>
+    <div class="tips-body">
+      <ul class="tips-list" id="tips-list"></ul>
+      <div class="ko-box">
+        <div class="ko-text"><strong>📂 WJEC Knowledge Organisers</strong><span id="ko-desc"></span></div>
+        <a class="ko-link" id="ko-link" href="#" target="_blank" rel="noopener">Open WJEC Resources ↗</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ RAG TRACKER ══════════════════ -->
+<div class="section" id="rag">
+  <div class="sec-title">RAG Self-Assessment Tracker 🔴🟡🟢</div>
+  <div class="sec-sub">Rate every topic honestly — Red (don't know it), Amber (nearly there), Green (confident). Your ratings save automatically in your browser.</div>
+  <div class="rag-intro">
+    <div style="flex:1;min-width:200px">
+      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:.88rem;color:var(--forest);margin-bottom:8px">How to use this tracker</div>
+      <div style="font-size:.83rem;color:var(--muted);line-height:1.5">Tap a subject to expand its topics. Rate each one Red, Amber or Green. Be honest — rating everything Green when you're not is the most common revision mistake. <strong style="color:var(--forest)">Red and Amber topics get your revision time.</strong></div>
+    </div>
+    <div class="rag-legend">
+      <div class="rag-key"><div class="rag-dot" style="background:#e74c3c"></div> Don't know it</div>
+      <div class="rag-key"><div class="rag-dot" style="background:#e8a020"></div> Nearly there</div>
+      <div class="rag-key"><div class="rag-dot" style="background:#27ae60"></div> Confident</div>
+    </div>
+  </div>
+  <div id="rag-blocks"></div>
+  <div class="rag-save-note">💾 Your ratings are saved automatically in this browser. They will still be here next time you open this page on this device.</div>
+</div>
+
+<!-- ══════════════════ EXAM TECHNIQUE ══════════════════ -->
+<div class="section" id="technique">
+  <div class="sec-title">Exam Technique Guide ✍️</div>
+  <div class="sec-sub">WJEC-specific advice on how to answer different question types and maximise your marks in the exam room.</div>
+  <div class="technique-tabs">
+    <button class="tech-tab active" onclick="showTechTab('general')">📋 General Skills</button>
+    <button class="tech-tab" onclick="showTechTab('extended')">📝 Extended Writing</button>
+    <button class="tech-tab" onclick="showTechTab('source')">📄 Source Questions</button>
+    <button class="tech-tab" onclick="showTechTab('calc')">🔢 Calculations</button>
+    <button class="tech-tab" onclick="showTechTab('short')">✅ Short Answer</button>
+  </div>
+
+  <div class="tech-panel active" id="tech-general">
+    <div class="tech-card">
+      <h3>⏱️ Time Management in the Exam</h3>
+      <p>The most preventable way to lose marks is running out of time on questions you could answer. Before you start, divide the time available by the total marks to get your "mark-a-minute" rate.</p>
+      <ul>
+        <li>Read the whole paper in the first 2 minutes — identify the questions you're strongest on.</li>
+        <li>Don't spend 15 minutes on a 3-mark question. Move on and come back.</li>
+        <li>Leave 5 minutes at the end to check for blank spaces and silly errors.</li>
+        <li>On WJEC papers, the marks in brackets tell you exactly how much to write.</li>
+      </ul>
+    </div>
+    <div class="tech-card">
+      <h3>🔍 Reading the Question</h3>
+      <p>Most marks are lost not because pupils don't know the answer, but because they didn't answer the question that was asked.</p>
+      <ul>
+        <li>Underline the command word: <em>Describe, Explain, Evaluate, Assess, Analyse, Compare.</em></li>
+        <li>Underline the topic focus — what specifically is the question asking about?</li>
+        <li><strong>Describe</strong> = say what it is. <strong>Explain</strong> = say what it is AND why. Never confuse the two.</li>
+        <li><strong>Evaluate/Assess</strong> = you must reach a supported judgement. Don't just list points.</li>
+      </ul>
+    </div>
+    <div class="tech-card">
+      <h3>✏️ Presentation and Accuracy</h3>
+      <ul>
+        <li>Write in sentences for any question worth 3 marks or more.</li>
+        <li>Spell key subject terminology correctly — examiners notice.</li>
+        <li>If you make a mistake, cross it out neatly with a single line. Don't scribble.</li>
+        <li>If you run out of space, ask for extra paper — don't squash writing into margins.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tech-panel" id="tech-extended">
+    <div class="tech-card">
+      <h3>📝 How to Answer Extended Writing Questions <span class="marks-badge">6–12 marks</span></h3>
+      <p>Extended writing questions are where the most marks are won and lost. WJEC rewards structured, argued responses — not lists of bullet points.</p>
+      <ul>
+        <li><strong>Plan first — always.</strong> Even 2 minutes of planning produces a far better answer than diving straight in.</li>
+        <li>Write your plan as a quick list of your main points — don't spend time making it neat.</li>
+        <li>Each paragraph should make one clear point, support it with evidence, and explain its significance.</li>
+        <li>For evaluation questions, you must present both sides and reach a conclusion.</li>
+        <li>Don't just end with "In conclusion, there are many factors..." — make an actual judgement.</li>
+      </ul>
+      <div class="example-box">
+        <strong>PEEL paragraph structure</strong>
+        <strong>P</strong>oint — State your argument clearly in one sentence.<br>
+        <strong>E</strong>vidence — Quote, statistic, named example, or case study.<br>
+        <strong>E</strong>xplain — Why does this evidence support your point?<br>
+        <strong>L</strong>ink — Connect back to the question or signpost your next point.
+      </div>
+    </div>
+    <div class="tech-card">
+      <h3>⚖️ Evaluation and "Assess" Questions</h3>
+      <p>These questions want you to weigh up evidence and reach a supported decision. Many pupils describe both sides but forget to actually evaluate them.</p>
+      <ul>
+        <li>Use language like: <em>"This is significant because...", "However, this is limited by...", "The most important factor is... because..."</em></li>
+        <li>Your conclusion must make a clear judgement — not "both sides have valid points."</li>
+        <li>Stronger answers explain <em>why</em> one side is more convincing than the other.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tech-panel" id="tech-source">
+    <div class="tech-card">
+      <h3>📄 Source/Document Questions <span class="marks-badge">History, English, RS</span></h3>
+      <p>Source questions test your ability to use and evaluate evidence — not just describe what it says. WJEC mark schemes specifically reward provenance analysis.</p>
+      <ul>
+        <li><strong>Use the source</strong> — quote or paraphrase from it directly. Don't just write about the topic.</li>
+        <li><strong>Analyse don't describe</strong> — say what the source suggests/implies, not just what it says.</li>
+        <li><strong>Provenance</strong> = who created it, when, why, and for what audience. Always consider this.</li>
+        <li>Ask: does the provenance make the source more or less useful/reliable?</li>
+        <li>Use your own knowledge to support, challenge or contextualise the source.</li>
+      </ul>
+      <div class="example-box">
+        <strong>Useful sentence starters</strong>
+        "This source suggests that... which implies..."<br>
+        "The fact that this was written by [author] in [date] means that..."<br>
+        "This source is useful because... however it is limited by..."<br>
+        "This is supported by my own knowledge that..."
+      </div>
+    </div>
+  </div>
+
+  <div class="tech-panel" id="tech-calc">
+    <div class="tech-card">
+      <h3>🔢 Calculation Questions <span class="marks-badge">Maths, Science, Business</span></h3>
+      <p>Calculation questions follow predictable patterns. Most marks are method marks — you can still score even with a wrong final answer if your working is shown.</p>
+      <ul>
+        <li><strong>Always show your working</strong> — never just write the answer.</li>
+        <li>Write the formula first, then substitute values, then calculate.</li>
+        <li>Include units in your answer — a number without a unit is often marked wrong.</li>
+        <li>If you get a strange answer, check whether you've used the right formula and the right units.</li>
+        <li>For multi-step calculations, label each step clearly so the examiner can follow your method.</li>
+      </ul>
+      <div class="example-box">
+        <strong>Method to follow every time</strong>
+        1. Write the formula: e.g. Speed = Distance ÷ Time<br>
+        2. Substitute: Speed = 120 ÷ 3<br>
+        3. Calculate: Speed = 40<br>
+        4. Add units: Speed = 40 m/s
+      </div>
+    </div>
+    <div class="tech-card">
+      <h3>📊 Graph and Data Questions</h3>
+      <ul>
+        <li>When describing a trend: state the direction, quote specific figures, and identify any anomalies.</li>
+        <li>Don't just say "it goes up" — say "it increases from X to Y between [point A] and [point B]."</li>
+        <li>For gradient calculations: choose two points far apart on the line for accuracy.</li>
+        <li>Always check axis labels and units before answering.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tech-panel" id="tech-short">
+    <div class="tech-card">
+      <h3>✅ Short Answer Questions <span class="marks-badge">1–3 marks</span></h3>
+      <p>Short answer questions seem simple but are easy to drop marks on through vagueness or missing key terms.</p>
+      <ul>
+        <li>1-mark questions want one precise point — not a sentence of waffle.</li>
+        <li>2-mark questions usually want a point plus a brief explanation or two separate points.</li>
+        <li>3-mark questions typically want a point, explanation, and example or development.</li>
+        <li>Use subject-specific vocabulary — general language rarely earns full marks.</li>
+        <li>If a question says "give one example" — give one. Two won't earn extra marks.</li>
+      </ul>
+    </div>
+    <div class="tech-card">
+      <h3>🔑 Key Command Words — Quick Reference</h3>
+      <ul>
+        <li><strong>State / Give / Name / Identify</strong> — One word or short phrase. No explanation needed.</li>
+        <li><strong>Describe</strong> — Say what something is or what happens. No "why" required.</li>
+        <li><strong>Explain</strong> — Say what AND why. Use "because", "therefore", "this means that."</li>
+        <li><strong>Analyse</strong> — Break it down. Examine the parts and how they relate.</li>
+        <li><strong>Evaluate / Assess / Discuss</strong> — Weigh up both sides. Reach a supported judgement.</li>
+        <li><strong>Compare</strong> — Identify similarities AND differences. Don't just describe each separately.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ EXAM DAY ══════════════════ -->
+<div class="section" id="examday">
+  <div class="sec-title">The Night Before &amp; Exam Day 📋</div>
+  <div class="sec-sub">What you do in the 24 hours before an exam matters more than most pupils realise. Follow this guide to give yourself the best possible chance.</div>
+
+  <div class="examday-grid">
+    <div class="examday-card">
+      <div class="examday-card-hdr night">🌙 The Night Before</div>
+      <ul class="examday-list">
+        <li><span class="ei">📚</span><span><strong>Light review only.</strong> Do a quick brain dump of key topics — no new learning, no cramming. Your brain needs time to consolidate, not more information.</span></li>
+        <li><span class="ei">🎒</span><span><strong>Pack your bag now.</strong> Pens (at least two), pencil, ruler, calculator (if allowed), student ID, water bottle. Don't leave this to the morning.</span></li>
+        <li><span class="ei">⏰</span><span><strong>Set two alarms.</strong> Don't rely on one. Know exactly what time you need to leave and work backwards.</span></li>
+        <li><span class="ei">📵</span><span><strong>Put your phone away by 9pm.</strong> Screens suppress melatonin and delay sleep. The hour before bed should be calm — read, shower, listen to music.</span></li>
+        <li><span class="ei">😴</span><span><strong>Aim for 8–9 hours sleep.</strong> Sleep is when memory consolidation happens. A well-rested brain outperforms a tired brain that crammed until midnight every time.</span></li>
+        <li><span class="ei">🍽️</span><span><strong>Eat a proper meal.</strong> Your brain runs on glucose. Don't go to bed hungry and don't skip breakfast in the morning.</span></li>
+      </ul>
+    </div>
+    <div class="examday-card">
+      <div class="examday-card-hdr morning">☀️ The Morning Of</div>
+      <ul class="examday-list">
+        <li><span class="ei">🍳</span><span><strong>Eat breakfast.</strong> Even if you're nervous and don't feel like it. Something slow-release — porridge, eggs, toast. Avoid high-sugar foods that cause an energy crash.</span></li>
+        <li><span class="ei">💧</span><span><strong>Drink water.</strong> Even mild dehydration affects concentration and memory. Take a water bottle into the exam.</span></li>
+        <li><span class="ei">🚶</span><span><strong>Leave early.</strong> Rushing to an exam raises cortisol (stress hormone) and impairs performance. Arrive with at least 10 minutes to spare.</span></li>
+        <li><span class="ei">📖</span><span><strong>Quick review — key terms only.</strong> A short look at your revision notes or flashcards is fine. Don't try to learn anything new on exam morning.</span></li>
+        <li><span class="ei">🤝</span><span><strong>Be careful with friends.</strong> Avoid classmates who are panicking — anxiety is contagious. Stay calm and focus on yourself.</span></li>
+        <li><span class="ei">🧘</span><span><strong>Breathe.</strong> If you feel nervous, take slow deep breaths — in for 4, hold for 4, out for 4. This activates the parasympathetic nervous system and genuinely calms you down.</span></li>
+      </ul>
+    </div>
+    <div class="examday-card">
+      <div class="examday-card-hdr during">📝 During the Exam</div>
+      <ul class="examday-list">
+        <li><span class="ei">👀</span><span><strong>Read the whole paper first.</strong> Spend the first 2 minutes scanning all questions. Identify the ones you're most confident on and start there.</span></li>
+        <li><span class="ei">⏱️</span><span><strong>Watch the clock.</strong> Check the time at the halfway point. Are you on track? Don't spend too long on any one question.</span></li>
+        <li><span class="ei">✏️</span><span><strong>Plan extended answers.</strong> Even a 60-second bullet-point plan produces a better answer than diving straight in.</span></li>
+        <li><span class="ei">🔄</span><span><strong>Attempt everything.</strong> Never leave a question blank. A guess or partial answer can still earn marks. Nothing is lost by trying.</span></li>
+        <li><span class="ei">🔍</span><span><strong>Check your work.</strong> If you finish early, check for blank spaces, missing units, and questions you may have missed on the back of a page.</span></li>
+        <li><span class="ei">💬</span><span><strong>Ask if unsure.</strong> You can always raise your hand and ask the invigilator to clarify something about the paper. It's allowed.</span></li>
+      </ul>
+    </div>
+    <div class="examday-card">
+      <div class="examday-card-hdr after">✅ After the Exam</div>
+      <ul class="examday-list">
+        <li><span class="ei">🚫</span><span><strong>Don't do a post-mortem.</strong> Picking over every answer you gave is damaging and pointless. You cannot change it now.</span></li>
+        <li><span class="ei">🗣️</span><span><strong>Limit the debrief with friends.</strong> A quick chat is fine. An hour of "what did you put for question 7?" helps nobody and raises anxiety.</span></li>
+        <li><span class="ei">🍕</span><span><strong>Do something you enjoy.</strong> A proper break between exams is not lazy — it's essential. Your brain needs recovery time.</span></li>
+        <li><span class="ei">😴</span><span><strong>Prioritise sleep.</strong> If you have another exam tomorrow, sleep matters more than squeezing in extra revision tonight.</span></li>
+        <li><span class="ei">👨‍🏫</span><span><strong>Talk to someone if you're struggling.</strong> If an exam goes badly, speak to your teacher or a trusted adult. One exam is not the end of the world.</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="panic-box">
+    <h3>😰 If You Panic in the Exam — What to Do</h3>
+    <div class="panic-steps">
+      <div class="panic-step"><div class="panic-num">1</div><div class="panic-text"><strong>Put your pen down.</strong> Stop trying to write. Trying to force an answer while panicking makes it worse.</div></div>
+      <div class="panic-step"><div class="panic-num">2</div><div class="panic-text"><strong>Breathe — box breathing.</strong> In for 4 counts, hold for 4, out for 4, hold for 4. Repeat three times. This is not wasted time — it works.</div></div>
+      <div class="panic-step"><div class="panic-num">3</div><div class="panic-text"><strong>Move to a different question.</strong> Skip the question that's blocked you. Come back to it later — often the answer surfaces once the pressure is off.</div></div>
+      <div class="panic-step"><div class="panic-num">4</div><div class="panic-text"><strong>Write something — anything.</strong> Even a partial answer, a definition of a key term, or a relevant fact. Partial marks are still marks. A blank scores zero.</div></div>
+      <div class="panic-step"><div class="panic-num">5</div><div class="panic-text"><strong>Remember: everyone finds it hard.</strong> The exam is designed to challenge. Feeling uncertain does not mean you're failing.</div></div>
+    </div>
+  </div>
+
+  <div class="checklist-box">
+    <h3>🎒 Exam Day Checklist — Tick these off the night before</h3>
+    <label class="checklist-item"><input type="checkbox"> At least two black/blue pens</label>
+    <label class="checklist-item"><input type="checkbox"> Pencil and eraser (for diagrams, graphs)</label>
+    <label class="checklist-item"><input type="checkbox"> Ruler</label>
+    <label class="checklist-item"><input type="checkbox"> Scientific calculator (charged/new batteries)</label>
+    <label class="checklist-item"><input type="checkbox"> Water bottle (clear, label removed)</label>
+    <label class="checklist-item"><input type="checkbox"> Student ID / exam number if required</label>
+    <label class="checklist-item"><input type="checkbox"> Know the exam time and room</label>
+    <label class="checklist-item"><input type="checkbox"> Alarms set — leaving time planned</label>
+    <label class="checklist-item"><input type="checkbox"> Phone charged (to be left outside the exam room)</label>
+  </div>
+</div>
+<script>
+// ── TAB NAVIGATION ───────────────────────────────────────────────────────────
+function showTab(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+
+// ── EXAM TECHNIQUE TABS ───────────────────────────────────────────────────────
+function showTechTab(id) {
+  document.querySelectorAll('.tech-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tech-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tech-' + id).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+
+// ── RAG TRACKER ───────────────────────────────────────────────────────────────
+const RAG_DATA = [
+  { subj:'Maths', icon:'📐', topics:['Number','Algebra','Ratio & Proportion','Geometry & Measures','Statistics & Probability','Graphs','Sequences','Simultaneous Equations','Quadratics','Trigonometry'] },
+  { subj:'English Language', icon:'✍️', topics:['Reading — Fiction (Component 1)','Reading — Non-Fiction (Component 2)','Creative Writing','Transactional Writing','Language Analysis','Structure Analysis','Evaluation Skills'] },
+  { subj:'English Literature', icon:'📚', topics:['Set Prose Text','Set Drama Text','Unseen Poetry','Anthology Poetry','Poetry Comparison','Context & Themes','Quotation Knowledge'] },
+  { subj:'Biology', icon:'🧬', topics:['Cells','Organisation','Infection & Response','Bioenergetics','Homeostasis','Inheritance, Variation & Evolution','Ecology','Required Practicals'] },
+  { subj:'Chemistry', icon:'⚗️', topics:['Atomic Structure','Bonding','Quantitative Chemistry','Chemical Changes','Energy Changes','Rate & Equilibrium','Organic Chemistry','Chemical Analysis','Required Practicals'] },
+  { subj:'Physics', icon:'⚡', topics:['Energy','Electricity','Particle Model','Atomic Structure','Forces','Waves','Electromagnetism','Required Practicals'] },
+  { subj:'History', icon:'🏛️', topics:['Key Events Timeline','Causation & Consequence','Source Analysis','Significance','Key Individuals','Extended Writing Structure','Contextual Knowledge'] },
+  { subj:'Geography', icon:'🌍', topics:['Natural Hazards','Living World','Physical Landscapes','Urban Issues','Changing Economic World','Resource Management','Case Studies','Fieldwork','Map Skills'] },
+  { subj:'Welsh', icon:'🏴󠁧󠁢󠁷󠁬󠁳󠁿', topics:['Speaking & Listening','Reading Comprehension','Writing — Formal','Writing — Informal','Grammar & Mutations','Vocabulary — Themes','Past Papers'] },
+  { subj:'French', icon:'🇫🇷', topics:['Speaking','Listening','Reading','Writing','Present Tense','Past Tense','Future Tense','Key Vocabulary Themes','Grammar Rules'] },
+  { subj:'Religious Studies', icon:'✝️', topics:['Beliefs & Teachings','Practices','Religion, Peace & Conflict','Religion, Crime & Punishment','Religion, Human Rights','Sources of Wisdom','Extended Writing'] },
+  { subj:'Business Studies', icon:'💼', topics:['Business in Context','Influences on Business','Business Operations','Human Resources','Finance','Marketing','Evaluation Skills','Calculations'] },
+  { subj:'Computer Science', icon:'💻', topics:['Binary & Hex','Data Representation','Algorithms','Programming Concepts','Networks','Security','Hardware','Software'] },
+];
+
+function loadRagData() { try { return JSON.parse(localStorage.getItem('ragData') || '{}'); } catch(e) { return {}; } }
+function saveRagData(data) { try { localStorage.setItem('ragData', JSON.stringify(data)); } catch(e) {} }
+
+function buildRag() {
+  const container = document.getElementById('rag-blocks');
+  const saved = loadRagData();
+  RAG_DATA.forEach(s => {
+    const block = document.createElement('div');
+    block.className = 'rag-subject-block';
+    const ratings = saved[s.subj] || {};
+    const total = s.topics.length;
+    const rated = Object.keys(ratings).length;
+    const greens = Object.values(ratings).filter(v=>v==='g').length;
+    const ambers = Object.values(ratings).filter(v=>v==='a').length;
+    const reds = Object.values(ratings).filter(v=>v==='r').length;
+    const pct = total > 0 ? Math.round((rated/total)*100) : 0;
+    const sid = s.subj.replace(/[^a-zA-Z0-9]/g,'-');
+    block.innerHTML = `
+      <div class="rag-subject-hdr" onclick="toggleRagBlock(this)">
+        <span class="hdr-icon">${s.icon}</span>
+        <span>${s.subj}</span>
+        <span style="margin-left:12px;font-size:.75rem;opacity:.7;font-weight:400">${rated}/${total} rated</span>
+        <span class="hdr-chevron">▼</span>
+      </div>
+      <div class="rag-progress"><div class="rag-progress-fill" id="pf-${sid}" style="width:${pct}%"></div></div>
+      <div class="rag-stats" id="rs-${sid}">
+        <span class="rag-stat r">🔴 ${reds}</span>
+        <span class="rag-stat a">🟡 ${ambers}</span>
+        <span class="rag-stat g">🟢 ${greens}</span>
+      </div>
+      <div class="rag-topics" id="rag-${sid}">
+        ${s.topics.map(t => {
+          const val = ratings[t] || '';
+          const tid = (s.subj+'|'+t).replace(/[^a-zA-Z0-9]/g,'-');
+          return `<div class="rag-topic-row">
+            <span class="rag-topic-name">${t}</span>
+            <div class="rag-btns">
+              <button class="rag-btn r ${val==='r'?'selected':''}" onclick="setRag('${s.subj}','${t}','r',this)" title="Don't know it">R</button>
+              <button class="rag-btn a ${val==='a'?'selected':''}" onclick="setRag('${s.subj}','${t}','a',this)" title="Nearly there">A</button>
+              <button class="rag-btn g ${val==='g'?'selected':''}" onclick="setRag('${s.subj}','${t}','g',this)" title="Confident">G</button>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>`;
+    container.appendChild(block);
+  });
+}
+
+function toggleRagBlock(hdr) {
+  const topics = hdr.parentElement.querySelector('.rag-topics');
+  const open = topics.classList.toggle('open');
+  hdr.classList.toggle('open', open);
+}
+
+function setRag(subj, topic, val, btn) {
+  const saved = loadRagData();
+  if (!saved[subj]) saved[subj] = {};
+  if (saved[subj][topic] === val) {
+    delete saved[subj][topic];
+    btn.classList.remove('selected');
+  } else {
+    saved[subj][topic] = val;
+    btn.closest('.rag-topic-row').querySelectorAll('.rag-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+  }
+  saveRagData(saved);
+  const s = RAG_DATA.find(x => x.subj === subj);
+  if (!s) return;
+  const ratings = saved[subj] || {};
+  const total = s.topics.length;
+  const rated = Object.keys(ratings).length;
+  const greens = Object.values(ratings).filter(v=>v==='g').length;
+  const ambers = Object.values(ratings).filter(v=>v==='a').length;
+  const reds = Object.values(ratings).filter(v=>v==='r').length;
+  const pct = total > 0 ? Math.round((rated/total)*100) : 0;
+  const sid = subj.replace(/[^a-zA-Z0-9]/g,'-');
+  const pf = document.getElementById('pf-'+sid);
+  const rs = document.getElementById('rs-'+sid);
+  if (pf) pf.style.width = pct+'%';
+  if (rs) rs.innerHTML = `<span class="rag-stat r">🔴 ${reds}</span><span class="rag-stat a">🟡 ${ambers}</span><span class="rag-stat g">🟢 ${greens}</span>`;
+}
+
+buildRag();
+
+// ── STRATEGY DATA ─────────────────────────────────────────────────────────────
+const STRATEGIES = [
+  { key:'retrieval', tier:1, icon:'🧪', title:'Retrieval Practice', blurb:'Test yourself rather than re-read. The act of remembering strengthens neural pathways far more than passive review.', detail:'Retrieval practice means testing yourself on material rather than re-reading it. The act of trying to remember something strengthens the neural pathway far more than passively looking at the answer. Even getting it wrong and then correcting it produces better retention than re-reading.', practice:'Flashcards (e.g. Anki, hand-written), past-paper questions answered from memory, brain-dump exercises (write everything you know on a topic without notes), practice questions from WJEC Knowledge Organisers.', bullets:['Close your notes. Write down everything you can remember about a topic.','Check what you missed. That is what to revise next.','Use past paper questions — not just to mark yourself, but to identify gaps.'] },
+  { key:'spaced', tier:1, icon:'📆', title:'Spaced Practice', blurb:'Spread revision over time. Return to topics just as they start to fade — this exploits the forgetting curve.', detail:'Spaced practice means spreading revision over time rather than cramming everything into one session. The brain consolidates memories during rest and sleep, so returning to a topic after a gap — just as it starts to fade — is the optimal moment to strengthen it.', practice:'Revisiting a topic after 1 day, then 3 days, then a week, then a fortnight. Building a revision timetable that deliberately returns to earlier material rather than moving linearly through subjects.', bullets:['Avoid blocking entire days on one subject.','Plan your timetable 4–6 weeks ahead of exams.','Include planned return sessions for topics covered weeks earlier.'] },
+  { key:'metacognition', tier:1, icon:'🪞', title:'Metacognition', blurb:'Know what you don\'t know. Use RAG ratings honestly — Red and Amber topics get priority time.', detail:'Metacognition — thinking about your own thinking — is perhaps the most underrated GCSE skill. Many pupils revise what they already know because it feels good. Genuine self-assessment is what separates effective revisers.', practice:'Use RAG (Red / Amber / Green) ratings honestly for every topic. Red and Amber get priority — not the Greens you\'re comfortable with. After every practice attempt, analyse \'why did I lose marks?\' not just \'what did I score?\'', bullets:['Use WJEC examiner reports to understand common mistakes.','Past paper questions under timed conditions are the most reliable proxy for exam performance.','Feeling comfortable with a topic is a warning sign — it means you\'re not pushing into weak areas.'] },
+  { key:'interleaving', tier:2, icon:'🔀', title:'Interleaving', blurb:'Mix different topics in one session. Feels harder, but forces your brain to distinguish between concepts.', detail:'Mix different topics within a single revision session rather than spending the whole session on one subject. It feels harder, but forces the brain to distinguish between concepts — exactly what exam questions require.', practice:'In a 90-minute session, spend 30 minutes on Maths, then 30 on Chemistry, then 30 on History — rather than 90 minutes on Maths alone.', bullets:['Use your timetable to plan interleaved sessions rather than blocked ones.','If it feels too difficult, that\'s a good sign — the effort is making it stick.'] },
+  { key:'elaboration', tier:2, icon:'🔗', title:'Elaboration', blurb:'Ask \'why does this work?\' after every fact. Builds a durable knowledge network.', detail:'Ask \'why does this work?\' and \'how does this connect to what I already know?\' after every fact. Turns isolated information into a connected network, which is far more durable than isolated memorisation.', practice:'After learning about photosynthesis, ask: \'Why does the plant need glucose? How does this connect to respiration?\' This deep processing creates lasting memories.', bullets:['For every fact, ask yourself \'so what?\' and \'why?\'','Connect new information to things you already know well.','Explain topics aloud to yourself (the Feynman technique).'] },
+  { key:'concrete', tier:2, icon:'💡', title:'Concrete Examples', blurb:'Illustrate every abstract idea with a specific example. Generating your own forces genuine understanding.', detail:'Illustrate every abstract idea with a specific, concrete example. Better still, generate your own — this requires deep processing of the concept and forces genuine understanding beyond surface memorisation.', practice:'Don\'t just define \'osmosis\' — picture a potato in salt water and explain what happens and why. Don\'t just describe \'totalitarianism\' — connect it to a specific historical example from your syllabus.', bullets:['For every concept in your Knowledge Organiser, write one concrete example.','Your own examples are more memorable than the textbook\'s.'] },
+  { key:'rereading', tier:3, icon:'📖', title:'Re-reading Notes', blurb:'Feels productive but produces very little lasting retention. Use only to identify what to practise next.', detail:'Re-reading feels productive but produces very little lasting retention. The information looks right because you\'ve seen it before — not because you could reproduce it. This is called the \'fluency illusion.\'', practice:'Use re-reading only as a first pass to identify what topics exist. Then immediately switch to retrieval practice — close the notes and test yourself on what you just read.', bullets:['Never count re-reading as a revision session on its own.','If you catch yourself re-reading, close the book and write from memory instead.'] },
+  { key:'highlighting', tier:3, icon:'🖊️', title:'Highlighting', blurb:'Passive activity with limited recall benefit. Use only as a first pass.', detail:'Highlighting is a passive activity with limited recall benefit. It creates a sense of engagement without genuine learning. After highlighting, you still can\'t retrieve the information — you just know where it is on the page.', practice:'Highlight only as a first pass to identify key terms. Then turn the page over and write those key terms from memory. The writing is the learning, not the highlighting.', bullets:['If a whole page is highlighted, you\'ve highlighted nothing.','Use highlighting sparingly — to identify retrieval targets, not as revision itself.'] },
+  { key:'mindmaps', tier:3, icon:'🗺️', title:'Mind Maps', blurb:'Useful for organising at the start — treat them as a starting point, not the endpoint.', detail:'Mind maps are useful for organising a topic at the start of revision, but they are frequently mistaken for the main event. Drawing a mind map does not require you to retrieve information — you can copy it straight from your notes.', practice:'Create a mind map of a topic from memory first (without notes). Then check against your notes. The gaps on your mind map are what you need to revise next.', bullets:['Mind map from memory, not from notes.','Treat the finished mind map as a starting point for flashcard creation or past paper work.'] }
+];
+
+const TIER_LABELS = { 1:'⭐ TIER 1 — HIGHEST IMPACT', 2:'🔶 TIER 2 — MEDIUM IMPACT', 3:'🔴 TIER 3 — LOW IMPACT' };
+
+// Build strategy buttons
+(function() {
+  const grid = document.getElementById('strat-grid');
+  STRATEGIES.forEach(st => {
+    const btn = document.createElement('button');
+    btn.className = 'strat-btn';
+    btn.id = 'strat-' + st.key;
+    btn.innerHTML = `<span class="tier-badge tier-${st.tier}">${TIER_LABELS[st.tier]}</span><span class="strat-icon">${st.icon}</span><h3>${st.title}</h3><p>${st.blurb}</p>`;
+    btn.onclick = () => showStrategy(st.key);
+    grid.appendChild(btn);
+  });
+})();
+
+let activeStrat = null;
+function showStrategy(key) {
+  const st = STRATEGIES.find(s => s.key === key);
+  if (!st) return;
+  if (activeStrat === key) {
+    activeStrat = null;
+    document.getElementById('detail-panel').classList.remove('open');
+    document.getElementById('strat-' + key).classList.remove('active');
+    return;
+  }
+  if (activeStrat) document.getElementById('strat-' + activeStrat)?.classList.remove('active');
+  activeStrat = key;
+  document.getElementById('strat-' + key).classList.add('active');
+  document.getElementById('detail-title').textContent = st.icon + ' ' + st.title;
+  document.getElementById('detail-body').textContent = st.detail;
+  document.getElementById('detail-practice').textContent = st.practice;
+  const ul = document.getElementById('detail-bullets');
+  ul.innerHTML = st.bullets.map(b => `<li>${b}</li>`).join('');
+  const panel = document.getElementById('detail-panel');
+  panel.classList.add('open');
+  panel.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+// ── POMODORO ──────────────────────────────────────────────────────────────────
+const DURATIONS = { focus:25*60, short:5*60, long:30*60 };
+let pomMode = 'focus', pomTotal = DURATIONS.focus, pomLeft = DURATIONS.focus;
+let pomRunning = false, pomInterval = null, pomCycle = 0;
+
+function setMode(m) {
+  if (pomRunning) return;
+  pomMode = m; pomTotal = DURATIONS[m]; pomLeft = DURATIONS[m];
+  document.querySelectorAll('.pom-mode').forEach(b => b.classList.remove('active'));
+  document.getElementById('m-' + m).classList.add('active');
+  document.getElementById('pom-label').textContent = m==='focus'?'FOCUS SESSION':m==='short'?'SHORT BREAK':'LONG BREAK';
+  document.getElementById('pom-start').textContent = '▶ Start';
+  updateDisplay();
+}
+
+function toggleTimer() {
+  if (pomRunning) {
+    clearInterval(pomInterval); pomRunning = false;
+    document.getElementById('pom-start').textContent = '▶ Resume';
+  } else {
+    pomRunning = true;
+    document.getElementById('pom-start').textContent = '⏸ Pause';
+    pomInterval = setInterval(() => {
+      pomLeft--;
+      updateDisplay();
+      if (pomLeft <= 0) {
+        clearInterval(pomInterval); pomRunning = false;
+        if (pomMode === 'focus') { pomCycle = Math.min(pomCycle+1,4); updateDots(); setMode('short'); }
+        else setMode('focus');
+      }
+    }, 1000);
+  }
+}
+
+function resetTimer() {
+  clearInterval(pomInterval); pomRunning = false; pomLeft = pomTotal; pomCycle = 0;
+  document.getElementById('pom-start').textContent = '▶ Start';
+  updateDisplay(); updateDots();
+}
+
+function updateDisplay() {
+  const m = String(Math.floor(pomLeft/60)).padStart(2,'0');
+  const s = String(pomLeft%60).padStart(2,'0');
+  document.getElementById('pom-time').textContent = m+':'+s;
+  document.getElementById('pom-fill').style.width = (pomLeft/pomTotal*100)+'%';
+  document.getElementById('pom-sub').textContent = pomMode==='focus'?`Session ${pomCycle+1} of 4`:'Break time! 🌿';
+}
+
+function updateDots() {
+  document.querySelectorAll('.pom-dot').forEach((d,i) => {
+    d.className = 'pom-dot';
+    if (i < pomCycle) d.classList.add('done');
+    else if (i === pomCycle) d.classList.add('cur');
+  });
+}
+
+// ── SUBJECT DATA ──────────────────────────────────────────────────────────────
+const SUBJECT_DATA = {
+  maths:{ icon:'📐', title:'Mathematics', sub:'WJEC GCSE — Foundation & Higher Tier', koUrl:'https://educationalresources.wjec.co.uk/en/Mathematics',
+    tips:[{icon:'🔢',text:'<strong>Past papers are everything.</strong> Maths is learned by doing, not reading. Complete at least one full past paper per week under timed conditions.'},{icon:'✅',text:'<strong>Mark your own work honestly.</strong> Write out model solutions for every question you got wrong or partially right.'},{icon:'📋',text:'<strong>Use the WJEC formula sheet wisely.</strong> Know which formulas ARE given and which you MUST memorise.'},{icon:'🔄',text:'<strong>Practise topic-by-topic first, then mixed.</strong> Once you\'ve revised a topic, use past paper questions that mix it with others.'},{icon:'🗂️',text:'<strong>RAG-rate every topic.</strong> Spend 70% of revision time on red and amber topics only.'}]},
+  english_lang:{ icon:'✍️', title:'English Language', sub:'WJEC GCSE — Component 1 & 2', koUrl:'https://educationalresources.wjec.co.uk/en/English%20Language',
+    tips:[{icon:'📰',text:'<strong>Read widely.</strong> WJEC Component 2 uses unseen non-fiction — exposure to newspapers, articles and opinion pieces builds confidence.'},{icon:'⏱️',text:'<strong>Practise timed writing.</strong> Component 1 requires creative writing under time pressure. Write full responses to past prompts.'},{icon:'🔍',text:'<strong>Zoom in on language.</strong> Don\'t just identify techniques — explain their specific effect. "This suggests..." and "This creates an effect of..." are your key phrases.'},{icon:'📝',text:'<strong>Learn the assessment objectives.</strong> AO1–AO5 appear across both components. Knowing what each AO rewards helps you target marks precisely.'},{icon:'🗣️',text:'<strong>Read answers aloud.</strong> If it sounds awkward spoken, it will read awkwardly too.'}]},
+  english_lit:{ icon:'📚', title:'English Literature', sub:'WJEC GCSE — Poetry, Prose & Drama', koUrl:'https://educationalresources.wjec.co.uk/en/English%20Literature',
+    tips:[{icon:'💬',text:'<strong>Know your quotations — but don\'t overquote.</strong> One well-analysed quote outperforms five weakly integrated ones.'},{icon:'🔗',text:'<strong>Always link to context.</strong> WJEC awards marks for understanding how context shapes meaning. Know 3–4 key contextual facts per text.'},{icon:'📖',text:'<strong>Revise the whole text.</strong> Questions ask about specific scenes, characters or poems. Gaps in knowledge cost marks.'},{icon:'✏️',text:'<strong>Practise writing introductions quickly.</strong> Plan your argument before you write — even 2 minutes of planning saves time.'},{icon:'🎭',text:'<strong>For poetry, compare confidently.</strong> Use connectives like "whereas", "in contrast" and "both poets...".'}]},
+  biology:{ icon:'🧬', title:'Biology', sub:'WJEC GCSE', koUrl:'https://educationalresources.wjec.co.uk/en/Biology',
+    tips:[{icon:'🔬',text:'<strong>Diagrams are worth marks.</strong> Practise drawing and labelling cell structures, the digestive system, the heart from memory.'},{icon:'📋',text:'<strong>Know your required practicals cold.</strong> Osmosis, enzyme experiments, photosynthesis investigations — know the variables, method, and how to interpret results.'},{icon:'🧪',text:'<strong>Scientific vocabulary matters.</strong> Use flashcards to test key terminology: diffusion, osmosis, active transport, mitosis, etc.'},{icon:'🔗',text:'<strong>Connect systems together.</strong> Exam questions often bridge multiple topics.'},{icon:'📊',text:'<strong>Practise graph interpretation.</strong> Describe the trend, quote figures, and explain anomalies.'}]},
+  chemistry:{ icon:'⚗️', title:'Chemistry', sub:'WJEC GCSE', koUrl:'https://educationalresources.wjec.co.uk/en/Chemistry',
+    tips:[{icon:'⚖️',text:'<strong>Balance equations confidently.</strong> Balancing symbol equations and half equations can be worth several marks. Practise until it\'s automatic.'},{icon:'🗂️',text:'<strong>Know the periodic table and trends.</strong> Reactivity, atomic structure, bonding types — these underpin almost every topic.'},{icon:'🧮',text:'<strong>Moles calculations need practice not memorisation.</strong> Work through moles, concentration, and gas volume calculations from past papers.'},{icon:'🔬',text:'<strong>Required practicals are guaranteed marks.</strong> Titration, chromatography, electrolysis — know each one inside out.'},{icon:'✍️',text:'<strong>Six-mark questions need a clear structure.</strong> Cover: what happens, why it happens, and what the evidence shows.'}]},
+  physics:{ icon:'⚡', title:'Physics', sub:'WJEC GCSE', koUrl:'https://educationalresources.wjec.co.uk/en/Physics',
+    tips:[{icon:'📐',text:'<strong>Every equation needs to be applied, not just recalled.</strong> Practise rearranging equations under time pressure.'},{icon:'🔢',text:'<strong>Show all working in calculations.</strong> If your final answer is wrong but your method is correct, you can still earn method marks.'},{icon:'📉',text:'<strong>Graphs in Physics carry heavy marks.</strong> Distance-time, velocity-time, I-V characteristics — know what each type shows.'},{icon:'🌍',text:'<strong>Apply Physics to real contexts.</strong> Read the question carefully and identify which concept is being tested.'},{icon:'⚡',text:'<strong>Electricity and waves need thorough revision.</strong> These topics appear heavily on higher-tier papers.'}]},
+  history:{ icon:'🏛️', title:'History', sub:'WJEC GCSE', koUrl:'https://educationalresources.wjec.co.uk/en/History',
+    tips:[{icon:'📅',text:'<strong>Chronology matters.</strong> Know the sequence of key events for each unit. Create timelines from memory.'},{icon:'⚖️',text:'<strong>Causation and consequence are the core skills.</strong> For every event, ask: What caused it? What were the short and long-term consequences?'},{icon:'📄',text:'<strong>Source questions reward specific skills.</strong> Consider provenance: who wrote it, when, and why.'},{icon:'✍️',text:'<strong>Extended writing needs an argument, not a list.</strong> Use PEEL paragraphs. Avoid bullet-pointing an extended answer.'},{icon:'🗂️',text:'<strong>Know your key individuals.</strong> Know what decisions they made and why, not just who they were.'}]},
+  geography:{ icon:'🌍', title:'Geography', sub:'WJEC GCSE', koUrl:'https://educationalresources.wjec.co.uk/en/Geography',
+    tips:[{icon:'🗺️',text:'<strong>Case studies are non-negotiable.</strong> Know your named examples inside out: location, statistics, causes, impacts, responses.'},{icon:'📊',text:'<strong>Data and map skills appear on every paper.</strong> Practise OS map interpretation, climate graphs, population pyramids, and choropleth maps.'},{icon:'🌱',text:'<strong>Sustainable development runs through everything.</strong> Be able to evaluate solutions and development strategies using evidence.'},{icon:'✍️',text:'<strong>Six-mark answers need geographic terminology.</strong> Use correct terms: abrasion, hydraulic action, urbanisation, brownfield site.'},{icon:'🔢',text:'<strong>Learn to calculate and interpret statistics.</strong> Percentage change, mean, median, range — these appear in assessment questions.'}]},
+  welsh:{ icon:'🏴󠁧󠁢󠁷󠁬󠁳󠁿', title:'Welsh', sub:'WJEC GCSE — Iaith Gymraeg', koUrl:'https://educationalresources.wjec.co.uk/en/Welsh%20Second%20Language',
+    tips:[{icon:'🗣️',text:'<strong>Speak Welsh every day, even briefly.</strong> The oral/oracy component rewards fluency and confidence.'},{icon:'📖',text:'<strong>Learn key vocabulary sets by topic.</strong> Teuluoedd, gwaith, yr amgylchedd, iechyd — revise in themed clusters using flashcards.'},{icon:'✍️',text:'<strong>Grammar errors lose marks on writing.</strong> Focus on: verb mutations, tense formation, and gender agreement.'},{icon:'👂',text:'<strong>Listen to Welsh language media.</strong> BBC Cymru Fyw, S4C clips, and Radio Cymru build listening comprehension skills.'},{icon:'🔄',text:'<strong>Practise past paper reading comprehensions under time pressure.</strong> You are expected to answer in Welsh.'}]},
+  french:{ icon:'🇫🇷', title:'French', sub:'WJEC GCSE', koUrl:'https://educationalresources.wjec.co.uk/',
+    tips:[{icon:'🗣️',text:'<strong>Speaking preparation is timed — practise out loud.</strong> Record yourself answering past oral questions.'},{icon:'📝',text:'<strong>Learn opinion phrases and linking words by heart.</strong> Je pense que, À mon avis — these lift writing marks significantly.'},{icon:'🕐',text:'<strong>Three tenses, minimum.</strong> WJEC rewards use of present, past (passé composé/imparfait), and future tense.'},{icon:'👂',text:'<strong>Train your ear for authentic French.</strong> Use RFI, TV5Monde, or French YouTube with subtitles.'},{icon:'📒',text:'<strong>Vocabulary is your currency.</strong> 20 new words per day, tested using retrieval. Prioritise high-frequency topic vocabulary.'}]},
+  religious_studies:{ icon:'✝️', title:'Religious Studies', sub:'WJEC GCSE', koUrl:'https://educationalresources.wjec.co.uk/en/Religious%20Studies',
+    tips:[{icon:'📖',text:'<strong>Learn key quotations from sacred texts.</strong> Precise quotes outperform vague paraphrases.'},{icon:'⚖️',text:'<strong>Evaluation questions require both sides.</strong> Never just argue one view — present and develop the opposing view with equal depth.'},{icon:'🤝',text:'<strong>Know the specific beliefs of each religion in your specification.</strong> Don\'t generalise.'},{icon:'🌐',text:'<strong>Connect religious beliefs to ethical issues.</strong> Explain how specific beliefs drive specific ethical positions.'},{icon:'📝',text:'<strong>Practise 12-mark extended answers.</strong> Plan: thesis → two supporting arguments → counter-argument → conclusion.'}]},
+  business:{ icon:'💼', title:'Business Studies', sub:'WJEC GCSE', koUrl:'https://educationalresources.wjec.co.uk/en/Business',
+    tips:[{icon:'📊',text:'<strong>Apply to real business contexts.</strong> WJEC questions often feature an unfamiliar business. Use the context provided.'},{icon:'🔢',text:'<strong>Financial calculations must be practised.</strong> Profit, revenue, costs, break-even — know the formulas and show your workings.'},{icon:'✅',text:'<strong>Know your key terms cold.</strong> Stakeholder, USP, cash flow, market segmentation — definitions are worth marks.'},{icon:'⚖️',text:'<strong>Evaluation questions need a decision.</strong> Make a justified conclusion — avoid sitting on the fence.'},{icon:'📰',text:'<strong>Follow business news.</strong> Real examples strengthen extended answers.'}]},
+  computer_science:{ icon:'💻', title:'Computer Science', sub:'WJEC GCSE', koUrl:'https://educationalresources.wjec.co.uk/en/Computer%20Science',
+    tips:[{icon:'💾',text:'<strong>Binary, hex and data representation need regular practice.</strong> Convert between denary, binary and hex until it\'s automatic.'},{icon:'🔀',text:'<strong>Trace through algorithms by hand.</strong> Take sorting algorithms and work through them step by step with example data.'},{icon:'🐍',text:'<strong>Write code, don\'t just read it.</strong> Practise writing functions, loops, and conditions from scratch.'},{icon:'🌐',text:'<strong>Know your networking and systems theory.</strong> TCP/IP, the OSI model, protocols, security threats, and encryption.'},{icon:'🗂️',text:'<strong>Use the specification as a checklist.</strong> Work through every topic on the spec and RAG-rate your confidence against each one.'}]}
+};
+
+function showSubject() {
+  const key = document.getElementById('subj-select').value;
+  const d = SUBJECT_DATA[key];
+  const panel = document.getElementById('subj-panel');
+  if (!d) { panel.classList.remove('open'); return; }
+  document.getElementById('s-icon').textContent = d.icon;
+  document.getElementById('s-title').textContent = d.title;
+  document.getElementById('s-sub').textContent = d.sub;
+  const list = document.getElementById('tips-list');
+  list.innerHTML = d.tips.map(t => `<li><span class="tip-icon">${t.icon}</span><span>${t.text}</span></li>`).join('');
+  document.getElementById('ko-desc').textContent = `Access official Knowledge Organisers and past papers for ${d.title} on the WJEC educational resources website.`;
+  document.getElementById('ko-link').href = d.koUrl;
+  panel.classList.add('open');
+  panel.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+</script>
+</body>
+</html>
